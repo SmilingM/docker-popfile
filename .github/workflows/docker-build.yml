@@ -1,16 +1,16 @@
-name: Bouw POPFile Image
+name: Build POPFile Image
 
 on:
-  workflow_dispatch: # Hiermee krijg je een handmatige 'Start' knop op GitHub
+  workflow_dispatch: 
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Code ophalen
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
-      - name: Docker image bouwen
+      - name: Build docker image
         run: |
           docker build -t mijn-popfile-test .
-          echo "Bouw succesvol afgerond!"
+          echo "Build completed."
