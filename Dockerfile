@@ -14,7 +14,7 @@ RUN apt-get update -qq && apt-get install -y -qq \
     && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /opt/popfile \
-    && curl -L http://getpopfile.org/downloads/popfile-1.1.3.zip -o /tmp/popfile.zip \
+    && curl -L "https://downloads.sourceforge.net/project/popfile/popfile/popfile-1.1.3/popfile-1.1.3.zip" -o /tmp/popfile.zip \
     && unzip /tmp/popfile.zip -d /opt/popfile \
     && rm /tmp/popfile.zip
 
