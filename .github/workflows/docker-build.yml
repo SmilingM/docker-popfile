@@ -10,17 +10,7 @@ jobs:
       - name: Checkout repository code
         uses: actions/checkout@v5 # Node.js 24 compliance
 
-      - name: Download POPFile zip file safely
-        run: |
-          # Download directly into the GitHub workspace directory
-          curl -sSL "https://downloads.sourceforge.net/project/popfile/popfile/popfile-1.1.3/popfile-1.1.3.zip" -o ${{ github.workspace }}/popfile-1.1.3.zip
-          
-          # Verify the file is present in the build context
-          echo "Checking files in workspace:"
-          ls -lh ${{ github.workspace }}
-
       - name: Build the Docker image
         run: |
-          # Build using the current workspace as context
-          docker build -t local-popfile-test ${{ github.workspace }}
+          docker build -t local-popfile-test .
           echo "Build completed successfully!"
