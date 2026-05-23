@@ -17,8 +17,8 @@ RUN apt-get update -qq && apt-get install -y -qq \
 # Set up directories
 RUN mkdir -p /opt/popfile
 
-# Copy the zip file downloaded by GitHub Actions into the container
-COPY popfile-1.1.3.zip /tmp/popfile.zip
+# Copy the local zip file from the repository into the container
+COPY popfile-1.0.1.zip /tmp/popfile.zip
 
 # Extract POPFile and clean up the zip
 RUN unzip -q /tmp/popfile.zip -d /opt/popfile \
