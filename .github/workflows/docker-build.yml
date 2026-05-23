@@ -1,16 +1,26 @@
 name: Build POPFile Image
 
 on:
-  workflow_dispatch: 
+  workflow_dispatch: # Allows manual trigger via the GitHub UI
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Code ophalen
-        uses: actions/checkout@v5
+      - name: Checkout repository code
+        uses: actions/checkout@v5 # Node.js 24 compliance
 
-      - name: Build docker image
+      - name: Download POPFile zip file safely
         run: |
-          docker build -t mijn-popfile-test .
-          echo "Build completed."
+          # Download directly into the GitHub workspace directory
+          curl -sSL "https://downloads.sourceforge.net/project/popfile/popfile/popfile-1.1.3/popfile-1.1.3.zip" -o ${{ github.workspace }}/popfile-1.1.3.zip
+          
+          # Verify the file is present in the build context
+          echo "Checking files in workspace:"
+          ls -lh ${{ github.workspace }}
+
+      - name: Build the Docker image
+        run: |
+          # Build using the current workspace as context
+          docker build -t local-popfile-test ${{ github.workspace }}
+          echo "Build completed successfully!"
