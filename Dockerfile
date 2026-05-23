@@ -1,9 +1,11 @@
 FROM ubuntu:26.04
 
+# Prevent interactive prompts during installation
 ENV DEBIAN_FRONTEND=noninteractive
 
+# Install Perl, wget, unzip, and all required POPFile modules silently
 RUN apt-get update -qq && apt-get install -y -qq \
-    curl \
+    wget \
     unzip \
     perl \
     libdbi-perl \
@@ -13,11 +15,13 @@ RUN apt-get update -qq && apt-get install -y -qq \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
+# Download POPFile from the reliable SourceForge mirror using wget
 RUN mkdir -p /opt/popfile \
-    && curl -L "https://downloads.sourceforge.net/project/popfile/popfile/popfile-1.1.3/popfile-1.1.3.zip" -o /tmp/popfile.zip \
-    && unzip /tmp/popfile.zip -d /opt/popfile \
+    && wget -q "https://downloads.sourceforge.net/project/popfile/popfile/popfile-1.1.3/popfile-1.1.3.zip" -O /tmp/popfile.zip \
+    && unzip -q /tmp/popfile.zip -d /opt/popfile \
     && rm /tmp/popfile.zip
 
 WORKDIR /opt/popfile
 
+# Start POPFile and bind it to all interfaces on port 8080
 CMD ["perl", "popfile.pl", "--host", "0.0.0.0"]
