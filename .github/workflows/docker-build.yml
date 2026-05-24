@@ -1,16 +1,30 @@
-name: Build POPFile Image
+name: Build and Push POPFile Image
 
 on:
   workflow_dispatch: # Allows manual trigger via the GitHub UI
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write # Crucial: Allows GitHub to save the image to your Packages
+
     steps:
       - name: Checkout repository code
-        uses: actions/checkout@v5 # Node.js 24 compliance
+        uses: actions/checkout@v5
 
-      - name: Build the Docker image
-        run: |
-          docker build -t local-popfile-test .
-          echo "Build completed successfully!"
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }} # Automatic temporary key
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true # This explicitly uploads the image to your profile!
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
