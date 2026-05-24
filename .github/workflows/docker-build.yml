@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write # Crucial: Allows GitHub to save the image to your Packages
+      packages: write
 
     steps:
       - name: Checkout repository code
@@ -19,12 +19,13 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }} # Automatic temporary key
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
           context: .
-          push: true # This explicitly uploads the image to your profile!
+          push: true
+          # We use dynamic lowercase tags to prevent uppercase errors
           tags: |
-            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
+            ghcr.io/smilingm/popfile-docker:latest
